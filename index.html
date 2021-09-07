@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+      }
+      table {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 30px;
+      }
+      p {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 30px;
+      }
+      div {
+        width: 100%;
+        margin-top: 30px;
+      }
+      div span.button {
+        display: block;
+        width: 30%;
+        margin: 0 auto;
+        text-align: center;
+        padding: 10px 20px;
+        background: rgb(0, 47, 255);
+        border-radius: 5px;
+        color: #fff;
+        font-size: 14px;
+        box-shadow: 3px 3px 5px #ccc;
+        cursor: pointer;
+      }
+
+      td {
+        padding: 3px 5px;
+        height: 30px;
+        text-align: center;
+      }
+      table:first-child td {
+        height: 50px;
+      }
+      input {
+        width: 90%;
+        height: 30px;
+      }
+      .primary {
+        color: rgb(0, 47, 255);
+        padding: 0 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <table cellpadding="5" cellspacing="0">
+        <tr>
+          <td>分子：</td>
+          <td><input type="text" id="up" /></td>
+        </tr>
+        <tr>
+          <td>分母：</td>
+          <td><input type="text" id="down" /></td>
+        </tr>
+      </table>
+
+      <div>
+        <span onclick="computed()" id="computed" class="button" disabled
+          >计算</span
+        >
+      </div>
+
+      <table border="1" cellpadding="3" cellspacing="0" class="result">
+        <tr>
+          <td>计算结果：</td>
+          <td id="result"></td>
+        </tr>
+        <tr>
+          <td>乘1000:</td>
+          <td id="ride-1000"></td>
+        </tr>
+        <tr>
+          <td>乘1000之后转换成百<br />分比:</td>
+          <td id="pre"></td>
+        </tr>
+      </table>
+
+      <p>距离见面还剩：<span id="care"></span></p>
+    </div>
+    <script>
+      const reducer = (accumulator, currentValue) => accumulator * currentValue;
+      var care = document.getElementById("care");
+
+      //   document.getElementById('computed').onclick = function(){
+
+      //     result.innerText = molecule / denominator;
+      //     ride_1000.innerText = (molecule / denominator) * 1000;
+      //     pre.innerText = (molecule / denominator) * 100000 + "%";
+      //   }
+      function computed() {
+        var up = document.getElementById("up");
+        var down = document.getElementById("down");
+        if (up.value && down.value) {
+          var result = document.getElementById("result");
+          var ride_1000 = document.getElementById("ride-1000");
+          var pre = document.getElementById("pre");
+          var moleculeArr = up.value.trim().split("*");
+          var denominatorArr = down.value.trim().split("*");
+
+          var molecule = moleculeArr.reduce(reducer);
+          var denominator = denominatorArr.reduce(reducer);
+
+          result.innerText = molecule / denominator;
+          ride_1000.innerText = (molecule / denominator) * 1000;
+          pre.innerText = (molecule / denominator) * 100000 + "%";
+        } else {
+          alert("先输入吧  阳阳  ^ . ^");
+        }
+      }
+
+      function countDown(times) {
+        var nowTime = Date.now(); //当前时间
+        var setDate = new Date(times);
+        var setTime = setDate.getTime(); //设定的时间
+
+        //获取剩余时间总秒数
+        var getTimes = (setTime - nowTime) / 1000;
+
+        //获取天数
+        var d = parseInt(getTimes / 60 / 60 / 24);
+        d = d < 10 ? "0" + d : d;
+
+        //获取小时
+        var h = parseInt((getTimes / 60 / 60) % 24);
+        h = h < 10 ? "0" + h : h;
+
+        //获取分钟
+        var m = parseInt((getTimes / 60) % 60);
+        m = m < 10 ? "0" + m : m;
+
+        //获取秒数
+        var s = parseInt(getTimes % 60);
+        s = s < 10 ? "0" + s : s;
+
+        care.innerHTML = `<b class="primary">${d}</b>天 <b class="primary">${h}</b>时 <b class="primary">${m}</b>分 <b class="primary">${s}</b>秒`;
+      }
+
+      countDown("2021/10/1 23:20:00");
+      setInterval(() => {
+        countDown("2021/10/1 23:20:00");
+      }, 1000);
+    </script>
+  </body>
+</html>
